@@ -24,9 +24,7 @@ public class Route {
         this.routeId = routeId;
     }
 
-    public int getAgencyId() {
-        return agencyId;
-    }
+    public int getAgencyId() { return agencyId; }
 
     public void setAgencyId(int agencyId) {
         this.agencyId = agencyId;

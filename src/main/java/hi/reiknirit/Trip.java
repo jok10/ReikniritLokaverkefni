@@ -72,6 +72,17 @@ public class Trip {
         return new Trip(routeId, serviceId, tripId, tripHeadsign, tripShortName, directionId, blockId, shapeId);
     }
 
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "tripId='" + tripId + '\'' +
+                ", routeId=" + routeId +
+                ", serviceId='" + serviceId + '\'' +
+                ", directionId='" + directionId + '\'' +
+                ", blockId=" + blockId + '\'' +
+                ", shapeId=" + shapeId +
+                '}';
+    }
 
 
 

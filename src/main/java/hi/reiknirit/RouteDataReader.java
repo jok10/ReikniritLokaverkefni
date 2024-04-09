@@ -17,7 +17,10 @@ public class RouteDataReader {
             String line;
             while ((line = reader.readLine()) != null) {
                 Route route = Route.parseRoute(line);
-                routesMap.put(route.getRouteId(), route);
+                // If statement that filters out routs we don't need
+                if (route.getRouteId().substring(0,2).equals("ST")) {
+                    routesMap.put(route.getRouteId(), route);
+                }
             }
         }
         return routesMap;
@@ -44,7 +47,13 @@ public class RouteDataReader {
             String line;
             while ((line = reader.readLine()) != null) {
                 Trip trip = Trip.parseTrip(line);
-                routeTripsMap.put(trip.getRouteId(), trip);
+                // If statement that filters out trips we don't need
+                List<String> nightBus = List.of("101", "102", "103", "104", "105", "106");
+                if (trip.getRouteId().substring(0,2).equals("ST")
+                        && !trip.getServiceId().contains("S")
+                        && !nightBus.contains(trip.getRouteId().substring(3))) {
+                    routeTripsMap.put(trip.getTripId(), trip);
+                }
             }
         }
         return routeTripsMap;
@@ -75,8 +84,7 @@ public class RouteDataReader {
         StopTime stopTimesForStop = stopTimesMap.get(stopId);
         if (stopTimesForStop != null) {
             System.out.println("Arrival Time: " + stopTimesForStop.getArrivalTime());
-
         }
-
+        System.out.println(routeTripsMap.get("525217"));
     }
 }

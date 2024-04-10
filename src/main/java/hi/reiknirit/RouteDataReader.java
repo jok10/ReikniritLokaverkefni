@@ -74,11 +74,11 @@ public class RouteDataReader {
     }
 
     public static void main(String[] args) throws IOException {
-
         Map<String, Route> routesMap = readRoutesFromFile("routes.txt");
         Map<String, StopTime> stopTimesMap = readStopTimesFromFile("stop_times.txt");
         Map<String, Trip> routeTripsMap = readTripsFromFile("trips.txt");
         Map<String, Stop> stopsMap = readStopsFromFile("stops.txt");
+
 
         String stopId = "10000802";
         StopTime stopTimesForStop = stopTimesMap.get(stopId);
@@ -86,5 +86,54 @@ public class RouteDataReader {
             System.out.println("Arrival Time: " + stopTimesForStop.getArrivalTime());
         }
         System.out.println(routeTripsMap.get("525217"));
+
+        Graph graph = new Graph();
+
+        for (StopTime stopTime : stopTimesMap.values()) {
+            String tripId = stopTime.getTripId();
+            Trip trip = routeTripsMap.get(tripId);
+            if (trip != null) {
+                String routeId = trip.getRouteId();
+                Route route = routesMap.get(routeId);
+                if (route != null) {
+                    String startStopId = stopTime.getStopId();
+                    String departureTime = stopTime.getDepartureTime();
+
+                    // Find the next stop for this trip
+                    StopTime nextStopTime = findNextStop(stopTimesMap, tripId, stopTime.getStopSequence());
+                    if (nextStopTime != null) {
+                        String endStopId = nextStopTime.getStopId();
+                        String arrivalTime = nextStopTime.getArrivalTime();
+
+                        // Create a new node for this direct connection
+                        Node newNode = new Node(startStopId + "_" + endStopId);
+                        newNode.setDepartureTime(departureTime);
+                        newNode.setArrivalTime(arrivalTime);
+                        newNode.setTripId(tripId);
+                        newNode.setRouteId(routeId);
+                        newNode.setStartStopId(startStopId);
+                        newNode.setEndStopId(endStopId);
+
+                        // Add the new node to the graph
+                        graph.addNode(newNode);
+
+                        // Connect the start and end stops with the new node
+                        graph.addEdge(startStopId, newNode.getId());
+                        graph.addEdge(newNode.getId(), endStopId);
+                    }
+                }
+            }
+        }
+
     }
+
+    private static StopTime findNextStop(Map<String, StopTime> stopTimesMap, String tripId, int currentStopSequence) {
+        for (StopTime stopTime : stopTimesMap.values()) {
+            if (stopTime.getTripId().equals(tripId) && stopTime.getStopSequence() == currentStopSequence + 1) {
+                return stopTime;
+            }
+        }
+        return null;
+    }
+
 }

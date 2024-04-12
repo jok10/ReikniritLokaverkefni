@@ -1,5 +1,7 @@
 package hi.reiknirit;
 
+import java.util.List;
+
 public class StopTime {
     private String tripId;
     private String arrivalTime;
@@ -8,6 +10,7 @@ public class StopTime {
     private int stopSequence;
     private String stopHeadsign;
     private int pickupType;
+    private List<String> connectedStopId = null;
 
     public StopTime(String tripId, String arrivalTime, String departureTime, String stopId, int stopSequence, String stopHeadsign, int pickupType) {
         this.tripId = tripId;
@@ -61,4 +64,19 @@ public class StopTime {
         int pickupType = Integer.parseInt(parts[6]);
         return new StopTime(tripId, arrivalTime, departureTime, stopId, stopSequence, stopHeadsign, pickupType);
     }
+
+    @Override
+    public String toString() {
+        return "StopTime{" +
+                "tripId='" + tripId + '\'' +
+                ", arrivalTime=" + arrivalTime +
+                ", departureTime='" + departureTime + '\'' +
+                ", stopId='" + stopId + '\'' +
+                ", stopSequence=" + stopSequence + '\'' +
+                ", spickupType=" + pickupType +
+                '}';
+    }
+
+
+
 }

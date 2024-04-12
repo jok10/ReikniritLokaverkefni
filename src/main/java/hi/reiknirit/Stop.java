@@ -1,5 +1,6 @@
 package hi.reiknirit;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Stop {
@@ -8,6 +9,8 @@ public class Stop {
     private double stopLat;
     private double stopLon;
     private int locationType;
+
+    private List<Edge> connectedStops;
 
     public Stop(String stopId, String stopName, double stopLat, double stopLon, int locationType) {
         this.stopId = stopId;
@@ -35,6 +38,10 @@ public class Stop {
 
     public int getLocationType() {
         return locationType;
+    }
+
+    public List<Edge> getConnectedStops() {
+        return connectedStops;
     }
 
     public static Stop parseStop(String line) {

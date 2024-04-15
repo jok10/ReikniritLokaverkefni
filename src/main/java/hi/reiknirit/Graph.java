@@ -17,7 +17,7 @@ public class Graph {
         return nodes.get(stopId);
     }
 
-    public void addEdge(String sourceId, String destinationId) {
+    public void addNeighbour(String sourceId, String destinationId) {
         if (!nodes.containsKey(sourceId) || !nodes.containsKey(destinationId)) {
             // Handle error: One or both of the nodes do not exist
             return;
@@ -32,6 +32,26 @@ public class Graph {
         System.out.println("Nodes in the graph:");
         for (Node node : nodes.values()) {
             System.out.println(node);
+        }
+    }
+
+    public void printAllNodesAsLine() {
+        for (Map.Entry<String,Node> entry : nodes.entrySet()) {
+            System.out.println(entry.getValue().printAsLine());
+        }
+    }
+
+    public void printGraph() {
+        System.out.println("Graph:");
+
+        // Iterate over all nodes in the graph
+        for (Node node : nodes.values()) {
+            System.out.println("Node: " + node.getId());
+
+            // Iterate over the neighbors of the current node
+            for (String neighbor : node.getNeighbors().keySet()) {
+                System.out.println("  Neighbor: " + neighbor);
+            }
         }
     }
 

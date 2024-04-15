@@ -97,6 +97,18 @@ class Node {
         return degree;
     }
 
+    public String printAsLine(){
+        String retString = "";
+        retString += "Node id: " + this.id + "edges for node: ";
+        for (String key : neighbors.keySet()) {
+            retString += " " + key;
+        }
+
+
+
+        return retString;
+    }
+
     @Override
     public String toString() {
         return "Node{" +
@@ -105,7 +117,9 @@ class Node {
                 ", arrivalTime='" + arrivalTime + '\'' +
                 ", tripId='" + tripId + '\'' +
                 ", routeId='" + routeId + '\'' +
-                ", Neighbors='" + getOutdegree() + '\'' +
+                ", number of neighbors='" + getOutdegree() + '\'' +
                 '}';
     }
+
+
 }

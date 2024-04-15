@@ -77,11 +77,11 @@ public class RouteDataReader {
 
         String stopId = "10000802";
         StopTime stopTimesForStop = stopTimesMap.get(stopId);
-        if (stopTimesForStop != null) {
+        /*if (stopTimesForStop != null) {
             System.out.println("Arrival Time: " + stopTimesForStop.getArrivalTime());
         }
         System.out.println(routeTripsMap.get("525217"));
-        System.out.println(stopTimesMap.get("10000802").getDepartureTime());
+        System.out.println(stopTimesMap.get("10000802").getDepartureTime());*/
 
         Graph graph = new Graph();
 
@@ -126,13 +126,15 @@ public class RouteDataReader {
                         }
 
                         // Tengja nodes saman
-                        graph.addEdge(startNode.getId(), endNode.getId());
+                        graph.addNeighbour(startNode.getId(), endNode.getId());
                     }
                 }
             }
         }
 
         graph.printAllNodes();
+        //graph.printGraph();
+        graph.printAllNodesAsLine();
     }
 
 

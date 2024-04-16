@@ -1,6 +1,8 @@
 package hi.reiknirit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 class Node {
@@ -11,11 +13,11 @@ class Node {
     private String routeId;
     private String stopId;
     private String endStopId;
-    private Map<String, Node> neighbors;
+    private List<Node> neighbors;
 
     public Node(String id) {
         this.id = id;
-        this.neighbors = new HashMap<>();
+        this.neighbors = new ArrayList<>();
     }
 
     // Getters
@@ -47,7 +49,7 @@ class Node {
         return endStopId;
     }
 
-    public Map<String, Node> getNeighbors() {
+    public List<Node> getNeighbors() {
         return neighbors;
     }
 
@@ -80,33 +82,25 @@ class Node {
         this.endStopId = endStopId;
     }
 
-    public void setNeighbors(Map<String, Node> neighbors) {
-        this.neighbors = neighbors;
-    }
+
 
     // Other methods
     public void addEdge(Node neighbor) {
-        neighbors.put(neighbor.getId(), neighbor);
+        neighbors.add(neighbor);
     }
 
     public int getOutdegree() {
-        int degree = neighbors.size();
-        for (Node neighbor : neighbors.values()) {
-            degree += neighbor.getOutdegree();
-        }
-        return degree;
+        return neighbors.size();
     }
 
     public String printAsLine(){
-        String retString = "";
-        retString += "Node id: " + this.id + "edges for node: ";
-        for (String key : neighbors.keySet()) {
-            retString += " " + key;
+        StringBuilder retString = new StringBuilder();
+        retString.append("Node id: ").append(this.id).append(", edges for node:");
+        for (Node neighbor : neighbors) {
+            retString.append(" ").append(neighbor.getId());
         }
 
-
-
-        return retString;
+        return retString.toString();
     }
 
     @Override

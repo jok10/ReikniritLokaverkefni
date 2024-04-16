@@ -1,6 +1,8 @@
 package hi.reiknirit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 class Node {
@@ -13,9 +15,14 @@ class Node {
     private String endStopId;
     private Map<String, Node> neighbors;
 
+
+
+    private List<String> listOfNeighborIDs;
+
     public Node(String id) {
         this.id = id;
         this.neighbors = new HashMap<>();
+        this.listOfNeighborIDs = new ArrayList<>();
     }
 
     // Getters
@@ -83,10 +90,18 @@ class Node {
     public void setNeighbors(Map<String, Node> neighbors) {
         this.neighbors = neighbors;
     }
+    public List<String> getListOfNeighborIDs() {
+        return listOfNeighborIDs;
+    }
+
+    public void setListOfNeighborIDs(List<String> listOfNeighborIDs) {
+        this.listOfNeighborIDs = listOfNeighborIDs;
+    }
 
     // Other methods
     public void addEdge(Node neighbor) {
         neighbors.put(neighbor.getId(), neighbor);
+        listOfNeighborIDs.add(neighbor.getId());
     }
 
     public int getOutdegree() {
@@ -97,16 +112,22 @@ class Node {
         return degree;
     }
 
-    public String printAsLine(){
-        String retString = "";
-        retString += "Node id: " + this.id + "edges for node: ";
-        for (String key : neighbors.keySet()) {
-            retString += " " + key;
+    public String printAsLine() {
+        StringBuilder retString = new StringBuilder();
+        retString.append("Node id: ").append(this.id).append(", edges for node: ");
+        printNeighbors(this, retString);
+        return retString.toString();
+    }
+
+    private void printNeighbors(Node node, StringBuilder retString) {
+        Map<String, Node> neighborsMap = node.getNeighbors();
+        if (neighborsMap.isEmpty()) {
+            return;
         }
-
-
-
-        return retString;
+        for (Node neighbor : neighborsMap.values()) {
+            retString.append(neighbor.getId()).append(", ");
+            printNeighbors(neighbor, retString);
+        }
     }
 
     @Override
@@ -117,6 +138,7 @@ class Node {
                 ", arrivalTime='" + arrivalTime + '\'' +
                 ", tripId='" + tripId + '\'' +
                 ", routeId='" + routeId + '\'' +
+               // ", neighboursMap='" + neighbors + '\'' +
                 ", number of neighbors='" + getOutdegree() + '\'' +
                 '}';
     }

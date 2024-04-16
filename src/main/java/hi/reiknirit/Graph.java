@@ -24,14 +24,8 @@ public class Graph {
         }
         Node sourceNode = nodes.get(sourceId);
         Node destinationNode = nodes.get(destinationId);
-
-        // Add destinationNode as a neighbor of sourceNode
         sourceNode.addEdge(destinationNode);
-
-        // Add sourceNode as a neighbor of destinationNode
-        destinationNode.addEdge(sourceNode);
     }
-
 
 
     public void printAllNodes() {
@@ -55,8 +49,8 @@ public class Graph {
             System.out.println("Node: " + node.getId());
 
             // Iterate over the neighbors of the current node
-            for (Node neighbor : node.getNeighbors()) {
-                System.out.println("  Neighbor: " + neighbor.getId());
+            for (String neighbor : node.getNeighbors().keySet()) {
+                System.out.println("  Neighbor: " + neighbor);
             }
         }
     }

@@ -134,7 +134,7 @@ public class RouteDataReader {
 
         graph.printAllNodes();
         //graph.printGraph();
-        //graph.printAllNodesAsLine();
+        graph.printAllNodesAsLine();
     }
 
 

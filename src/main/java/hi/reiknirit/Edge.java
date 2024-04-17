@@ -36,11 +36,17 @@ class Edge {
     public void setWeight(int weight) {
         this.weight = weight;
     }
+    public int getWeight() {
+        return weight;
+    }
 
     private Node departureStop;
     private Node arrivalStop;
     private String departureTime;
     private String arrivalTime;
+
+
+
     private int weight;
 
     public Edge(Node stop1, Node stop2, String stopTime1, String stopTime2) {

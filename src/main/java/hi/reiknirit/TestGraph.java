@@ -79,8 +79,8 @@ public class TestGraph {
 
     private static void testShortestPath(Graph graph) {
         // Test shortest path
-        String sourceId = "Meistaraveillir"; // Change to actual ID
-        String destinationId = "FB"; // Change to actual ID
+        String sourceId = "90000116";
+        String destinationId = "90000446";
         List<Node> shortestPath = graph.findShortestPath(sourceId, destinationId);
         if (shortestPath != null) {
             System.out.println("Shortest path from " + sourceId + " to " + destinationId + ": " + shortestPath);

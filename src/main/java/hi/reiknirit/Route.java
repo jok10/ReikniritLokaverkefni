@@ -79,14 +79,5 @@ public class Route {
                 '}';
     }
 
-    public static void main(String[] args) {
-        String data = "AF.91,1,91,Egilsstaðir <-> Norðfjörður,3\n" +
-                // Add all the data lines here
-                "VL.84,1,84,Skagaströnd <-> Blönduós,3";
-        String[] lines = data.split("\n");
-        for (String line : lines) {
-            Route route = Route.parseRoute(line);
-            System.out.println(route);
-        }
-    }
+
 }

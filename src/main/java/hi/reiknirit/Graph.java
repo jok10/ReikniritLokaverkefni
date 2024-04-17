@@ -1,7 +1,6 @@
 package hi.reiknirit;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Graph {
     private Map<String, Node> nodes;
@@ -17,14 +16,15 @@ public class Graph {
         return nodes.get(stopId);
     }
 
-    public void addNeighbour(String sourceId, String destinationId) {
+    public void addNeighbour(String sourceId, String destinationId, String departureTime, String arrivalTime) {
         if (!nodes.containsKey(sourceId) || !nodes.containsKey(destinationId)) {
             // Handle error: One or both of the nodes do not exist
             return;
         }
         Node sourceNode = nodes.get(sourceId);
         Node destinationNode = nodes.get(destinationId);
-        sourceNode.addEdge(destinationNode);
+        Edge edge = new Edge(sourceNode, destinationNode, departureTime, arrivalTime);
+        sourceNode.addEdge(edge);
     }
 
 
@@ -44,15 +44,61 @@ public class Graph {
     public void printGraph() {
         System.out.println("Graph:");
 
-        // Iterate over all nodes in the graph
+
         for (Node node : nodes.values()) {
             System.out.println("Node: " + node.getId());
 
-            // Iterate over the neighbors of the current node
-            for (String neighbor : node.getNeighbors().keySet()) {
-                System.out.println("  Neighbor: " + neighbor);
+
+            for (Edge edge : node.getEdges()) {
+                System.out.println("  Edge: " + edge.getDepartureStop().getId() + " -> " + edge.getArrivalStop().getId());
             }
         }
+    }
+
+    public List<Node> findShortestPath(String startId, String endId) {
+        Map<String, Integer> distance = new HashMap<>();
+        Map<String, Node> previous = new HashMap<>();
+        PriorityQueue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(distance::get));
+
+        // Initialize distance for all nodes to infinity, except the start node
+        for (String nodeId : nodes.keySet()) {
+            distance.put(nodeId, Integer.MAX_VALUE);
+            previous.put(nodeId, null);
+        }
+        distance.put(startId, 0);
+
+        // Add start node to the queue
+        queue.add(nodes.get(startId));
+
+        // Dijkstra's algorithm
+        while (!queue.isEmpty()) {
+            Node currentNode = queue.poll();
+
+            if (currentNode.getId().equals(endId)) {
+                break; // Found the shortest path to the destination
+            }
+
+            for (Edge edge : currentNode.getEdges()) {
+                Node neighborNode = edge.getArrivalStop();
+                int altDistance = distance.get(currentNode.getId()) + edge.getWeight();
+                if (altDistance < distance.get(neighborNode.getId())) {
+                    distance.put(neighborNode.getId(), altDistance);
+                    previous.put(neighborNode.getId(), currentNode);
+                    queue.add(neighborNode);
+                }
+            }
+        }
+
+        // Reconstruct the shortest path
+        List<Node> shortestPath = new ArrayList<>();
+        Node currentNode = nodes.get(endId);
+        while (currentNode != null) {
+            shortestPath.add(currentNode);
+            currentNode = previous.get(currentNode.getId());
+        }
+        Collections.reverse(shortestPath);
+
+        return shortestPath;
     }
 
     private StopTime findNextStop(Map<String, StopTime> stopTimesMap, String tripId, int currentStopSequence) {

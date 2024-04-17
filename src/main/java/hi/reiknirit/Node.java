@@ -13,7 +13,7 @@ class Node {
     private String routeId;
     private String stopId;
     private String endStopId;
-    private Map<String, Node> neighbors;
+    private List<Edge> edges;
 
 
 
@@ -21,8 +21,7 @@ class Node {
 
     public Node(String id) {
         this.id = id;
-        this.neighbors = new HashMap<>();
-        this.listOfNeighborIDs = new ArrayList<>();
+        this.edges = new ArrayList<>();
     }
 
     // Getters
@@ -54,8 +53,8 @@ class Node {
         return endStopId;
     }
 
-    public Map<String, Node> getNeighbors() {
-        return neighbors;
+    public List<Edge> getEdges() {
+        return edges;
     }
 
     // Setters
@@ -87,9 +86,6 @@ class Node {
         this.endStopId = endStopId;
     }
 
-    public void setNeighbors(Map<String, Node> neighbors) {
-        this.neighbors = neighbors;
-    }
     public List<String> getListOfNeighborIDs() {
         return listOfNeighborIDs;
     }
@@ -99,36 +95,24 @@ class Node {
     }
 
     // Other methods
-    public void addEdge(Node neighbor) {
-        neighbors.put(neighbor.getId(), neighbor);
-        listOfNeighborIDs.add(neighbor.getId());
+    public void addEdge(Edge edge) {
+        edges.add(edge);
     }
 
     public int getOutdegree() {
-        int degree = neighbors.size();
-        for (Node neighbor : neighbors.values()) {
-            degree += neighbor.getOutdegree();
-        }
-        return degree;
+        return edges.size();
     }
 
     public String printAsLine() {
         StringBuilder retString = new StringBuilder();
         retString.append("Node id: ").append(this.id).append(", edges for node: ");
-        printNeighbors(this, retString);
+        for (Edge edge : edges) {
+            retString.append(edge.getArrivalStop().getId()).append(", ");
+        }
         return retString.toString();
     }
 
-    private void printNeighbors(Node node, StringBuilder retString) {
-        Map<String, Node> neighborsMap = node.getNeighbors();
-        if (neighborsMap.isEmpty()) {
-            return;
-        }
-        for (Node neighbor : neighborsMap.values()) {
-            retString.append(neighbor.getId()).append(", ");
-            printNeighbors(neighbor, retString);
-        }
-    }
+
 
     @Override
     public String toString() {
@@ -138,7 +122,6 @@ class Node {
                 ", arrivalTime='" + arrivalTime + '\'' +
                 ", tripId='" + tripId + '\'' +
                 ", routeId='" + routeId + '\'' +
-               // ", neighboursMap='" + neighbors + '\'' +
                 ", number of neighbors='" + getOutdegree() + '\'' +
                 '}';
     }

@@ -73,6 +73,6 @@ class Edge {
         return arrivalTimeMinutes;
     }
         private void generateWeight(){
-            this.weight = parseArrivalTime()-parseDepartureTime();
+            this.weight = parseDepartureTime()-parseArrivalTime();
     }
 }

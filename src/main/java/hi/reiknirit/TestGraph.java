@@ -37,12 +37,16 @@ public class TestGraph {
                     Node startNode = graph.getNode(startStopId);
                     if (startNode == null) {
                         startNode = new Node(startStopId);
+                        startNode.setTripId(tripId);
+                        startNode.setRouteId(trip.getRouteId());
                         graph.addNode(startNode);
                     }
 
                     Node endNode = graph.getNode(endStopId);
                     if (endNode == null) {
                         endNode = new Node(endStopId);
+                        endNode.setTripId(tripId);
+                        endNode.setRouteId(trip.getRouteId());
                         graph.addNode(endNode);
                     }
 

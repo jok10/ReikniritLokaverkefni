@@ -129,8 +129,7 @@ class Node {
     public String toString() {
         return "Node{" +
                 "stopid='" + id + '\'' +
-                ", departureTime='" + departureTime + '\'' +
-                ", arrivalTime='" + arrivalTime + '\'' +
+
                 ", tripId='" + tripId + '\'' +
                 ", routeId='" + routeId + '\'' +
                 ", number of neighbors='" + getOutdegree() + '\'' +

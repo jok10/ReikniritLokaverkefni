@@ -78,9 +78,6 @@ public class RouteDataReader {
         Map<String, Trip> routeTripsMap = readTripsFromFile("trips.txt");
         Map<String, Stop> stopsMap = readStopsFromFile("stops.txt");
 
-        //TEST:
-        System.out.println(stopTimesList.get(100));
-
         Graph graph = new Graph();
 
         for (StopTime stopTime : stopTimesList) {
@@ -94,7 +91,7 @@ public class RouteDataReader {
                     String departureTime = stopTime.getDepartureTime();
 
                     // Find the next stop for this trip
-                    StopTime nextStopTime = findNextStop(stopTimesList, tripId, stopTime.getStopSequence());
+                    StopTime nextStopTime = findNextStop(stopTimesList, tripId, stopTime.getStopSequence(), stopTimesList.indexOf(stopTime));
                     if (nextStopTime != null) {
                         String endStopId = nextStopTime.getStopId();
                         String arrivalTime = nextStopTime.getArrivalTime();
@@ -118,15 +115,13 @@ public class RouteDataReader {
                 }
             }
         }
-
     }
 
-    private static StopTime findNextStop(List<StopTime> stopTimesList, String tripId, int currentStopSequence) {
-        for (StopTime stopTime : stopTimesList) {
-            if (stopTime.getTripId().equals(tripId) && stopTime.getStopSequence() == currentStopSequence + 1) {
-                return stopTime;
+    private static StopTime findNextStop(List<StopTime> stopTimesList, String tripId, int currentStopSequence, int index) {
+        StopTime possiblyNextStop = stopTimesList.get(index+1);
+            if (possiblyNextStop.getTripId().equals(tripId) && possiblyNextStop.getStopSequence() == currentStopSequence + 1) {
+                return possiblyNextStop;
             }
-        }
         return null;
     }
 

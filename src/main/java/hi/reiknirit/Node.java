@@ -134,7 +134,6 @@ class Node {
                 ", tripId='" + tripId + '\'' +
                 ", routeId='" + routeId + '\'' +
                 ", number of neighbors='" + getOutdegree() + '\'' +
-                "Edges: " + getEdges() +
                 '}';
     }
 

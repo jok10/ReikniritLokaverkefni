@@ -7,11 +7,11 @@ import java.util.Map;
 public class TestGraph {
     public static void main(String[] args) throws IOException {
         Map<String, Route> routesMap = RouteDataReader.readRoutesFromFile("routes.txt");
-        Map<String, StopTime> stopTimesMap = RouteDataReader.readStopTimesFromFile("stop_times.txt");
+        List<StopTime> stopTimesList = RouteDataReader.readStopTimesFromFile("stop_times.txt");
         Map<String, Trip> routeTripsMap = RouteDataReader.readTripsFromFile("trips.txt");
         Map<String, Stop> stopsMap = RouteDataReader.readStopsFromFile("stops.txt");
 
-        Graph graph = createGraph(stopTimesMap, routeTripsMap, routesMap);
+        Graph graph = createGraph(stopTimesList, routeTripsMap, routesMap);
 
         graph.printGraph();
 
@@ -21,10 +21,10 @@ public class TestGraph {
         testShortestPath(graph);
     }
 
-    private static Graph createGraph(Map<String, StopTime> stopTimesMap, Map<String, Trip> routeTripsMap, Map<String, Route> routesMap) {
+    private static Graph createGraph(List<StopTime> stopTimesList, Map<String, Trip> routeTripsMap, Map<String, Route> routesMap) {
         Graph graph = new Graph();
 
-        for (StopTime stopTime : stopTimesMap.values()) {
+        for (StopTime stopTime : stopTimesList) {
             String tripId = stopTime.getTripId();
             Trip trip = routeTripsMap.get(tripId);
             String startStopId = stopTime.getStopId();
@@ -34,7 +34,7 @@ public class TestGraph {
                 String routeId = trip.getRouteId();
                 Route route = routesMap.get(routeId);
                 if (route != null) {
-                    StopTime nextStopTime = findNextStop(stopTimesMap, tripId, stopTime.getStopSequence());
+                    StopTime nextStopTime = findNextStop(stopTimesList, tripId, stopTime.getStopSequence(), stopTimesList.indexOf(stopTime));
                     if (nextStopTime != null) {
                         String endStopId = nextStopTime.getStopId();
 
@@ -70,11 +70,10 @@ public class TestGraph {
         return graph;
     }
 
-    private static StopTime findNextStop(Map<String, StopTime> stopTimesMap, String tripId, int currentStopSequence) {
-        for (StopTime stopTime : stopTimesMap.values()) {
-            if (stopTime.getTripId().equals(tripId) && stopTime.getStopSequence() == currentStopSequence + 1) {
-                return stopTime;
-            }
+    private static StopTime findNextStop(List<StopTime> stopTimesList, String tripId, int currentStopSequence, int index) {
+        StopTime possiblyNextStop = stopTimesList.get(index+1);
+        if (possiblyNextStop.getTripId().equals(tripId) && possiblyNextStop.getStopSequence() == currentStopSequence + 1) {
+            return possiblyNextStop;
         }
         return null;
     }

@@ -13,12 +13,12 @@ public class TestGraph {
 
         Graph graph = createGraph(stopTimesList, routeTripsMap, routesMap);
 
-        //graph.printGraph();
+        graph.printGraph();
 
-        graph.printAllNodesAsLine();
+        //graph.printAllNodesAsLine();
 
         // Test shortest path
-        testShortestPath(graph);
+        //testShortestPath(graph);
     }
 
     private static Graph createGraph(List<StopTime> stopTimesList, Map<String, Trip> routeTripsMap, Map<String, Route> routesMap) {
@@ -28,41 +28,24 @@ public class TestGraph {
             String tripId = stopTime.getTripId();
             Trip trip = routeTripsMap.get(tripId);
             String startStopId = stopTime.getStopId();
-            String departureTime = stopTime.getDepartureTime();
-            String arrivalTime = stopTime.getArrivalTime();
             if (trip != null) {
-                String routeId = trip.getRouteId();
-                Route route = routesMap.get(routeId);
-                if (route != null) {
-                    StopTime nextStopTime = findNextStop(stopTimesList, tripId, stopTime.getStopSequence(), stopTimesList.indexOf(stopTime));
-                    if (nextStopTime != null) {
-                        String endStopId = nextStopTime.getStopId();
+                StopTime nextStopTime = findNextStop(stopTimesList, tripId, stopTime.getStopSequence(), stopTimesList.indexOf(stopTime));
+                if (nextStopTime != null) {
+                    String endStopId = nextStopTime.getStopId();
 
-                        Node startNode = graph.getNode(startStopId);
-                        if (startNode == null) {
-                            startNode = new Node(startStopId);
-                            startNode.setDepartureTime(stopTime.getDepartureTime());
-                            startNode.setArrivalTime(stopTime.getArrivalTime());
-                            startNode.setTripId(stopTime.getTripId());
-                            startNode.setRouteId(trip.getRouteId());
-                            graph.addNode(startNode);
-                        }
-
-                        Node endNode = graph.getNode(endStopId);
-                        if (endNode == null) {
-                            endNode = new Node(endStopId);
-                            endNode.setDepartureTime(stopTime.getDepartureTime());
-                            endNode.setArrivalTime(stopTime.getArrivalTime());
-                            endNode.setTripId(stopTime.getTripId());
-                            Trip nextTrip = routeTripsMap.get(nextStopTime.getTripId());
-                            if (nextTrip != null) {
-                                endNode.setRouteId(nextTrip.getRouteId());
-                            }
-                            graph.addNode(endNode);
-                        }
-
-                        graph.addNeighbour(startNode.getId(), endNode.getId(), departureTime, arrivalTime);
+                    Node startNode = graph.getNode(startStopId);
+                    if (startNode == null) {
+                        startNode = new Node(startStopId);
+                        graph.addNode(startNode);
                     }
+
+                    Node endNode = graph.getNode(endStopId);
+                    if (endNode == null) {
+                        endNode = new Node(endStopId);
+                        graph.addNode(endNode);
+                    }
+
+                    graph.addNeighbour(startNode.getId(), endNode.getId(), stopTime.getDepartureTime(), nextStopTime.getArrivalTime());
                 }
             }
         }

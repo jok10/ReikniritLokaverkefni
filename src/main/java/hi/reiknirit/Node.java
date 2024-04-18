@@ -97,7 +97,11 @@ class Node {
     }
 
     public int getOutdegree() {
-        return edges.size();
+        Set<String> edgeIds = new HashSet<>();
+        for (Edge edge : edges) {
+            edgeIds.add(edge.getArrivalStop().getId());
+        }
+        return edgeIds.size();
     }
 
     public String printAsLine() {

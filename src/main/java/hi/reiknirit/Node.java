@@ -1,9 +1,6 @@
 package hi.reiknirit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class Node {
     private String id;
@@ -106,11 +103,21 @@ class Node {
     public String printAsLine() {
         StringBuilder retString = new StringBuilder();
         retString.append("Node id: ").append(this.id).append(", edges for node: ");
+
+
+        Set<String> edgeIds = new HashSet<>();
         for (Edge edge : edges) {
-            retString.append(edge.getArrivalStop().getId()).append(", ");
+            edgeIds.add(edge.getArrivalStop().getId());
         }
+
+
+        for (String edgeId : edgeIds) {
+            retString.append(edgeId).append(", ");
+        }
+
         return retString.toString();
     }
+
 
 
 
@@ -123,6 +130,7 @@ class Node {
                 ", tripId='" + tripId + '\'' +
                 ", routeId='" + routeId + '\'' +
                 ", number of neighbors='" + getOutdegree() + '\'' +
+                "Edges: " + getEdges() +
                 '}';
     }
 

@@ -46,11 +46,11 @@ public class Graph {
 
 
         for (Node node : nodes.values()) {
-            System.out.println("Node: " + node.getId());
+            System.out.println("Node: " + node.getId() + " Route: "+ node.getRouteId());
 
 
             for (Edge edge : node.getEdges()) {
-                System.out.println("  Edge: " + edge.getDepartureStop().getId() + " -> " + edge.getArrivalStop().getId());
+                System.out.println("  Edge: " + edge.getDepartureStop().getId() +" Departure Time: " + edge.getDepartureTime() + " -> " + edge.getArrivalStop().getId() + " Arrival Time: " + edge.getArrivalTime());
             }
         }
     }

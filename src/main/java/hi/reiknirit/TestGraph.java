@@ -13,9 +13,9 @@ public class TestGraph {
 
         Graph graph = createGraph(stopTimesList, routeTripsMap, routesMap);
 
-        graph.printGraph();
+        //graph.printGraph();
 
-        //graph.printAllNodesAsLine();
+        graph.printAllNodesAsLine();
 
         // Test shortest path
         testShortestPath(graph);

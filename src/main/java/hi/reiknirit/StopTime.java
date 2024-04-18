@@ -61,4 +61,17 @@ public class StopTime {
         int pickupType = Integer.parseInt(parts[6]);
         return new StopTime(tripId, arrivalTime, departureTime, stopId, stopSequence, stopHeadsign, pickupType);
     }
+
+    @Override
+    public String toString() {
+        return "StopTime{" +
+                "tripId='" + tripId + '\'' +
+                ", arrivalTime=" + arrivalTime +
+                ", departureTime='" + departureTime + '\'' +
+                ", stopId='" + stopId + '\'' +
+                ", stopSequence=" + stopSequence + '\'' +
+                ", stopHeadsign=" + stopHeadsign + '\'' +
+                ", pickupType=" + pickupType +
+                '}';
+    }
 }

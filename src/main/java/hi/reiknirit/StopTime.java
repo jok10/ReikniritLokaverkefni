@@ -1,7 +1,5 @@
 package hi.reiknirit;
 
-import java.util.List;
-
 public class StopTime {
     private String tripId;
     private String arrivalTime;
@@ -10,7 +8,6 @@ public class StopTime {
     private int stopSequence;
     private String stopHeadsign;
     private int pickupType;
-    private List<String> connectedStopId = null;
 
     public StopTime(String tripId, String arrivalTime, String departureTime, String stopId, int stopSequence, String stopHeadsign, int pickupType) {
         this.tripId = tripId;
@@ -73,10 +70,8 @@ public class StopTime {
                 ", departureTime='" + departureTime + '\'' +
                 ", stopId='" + stopId + '\'' +
                 ", stopSequence=" + stopSequence + '\'' +
-                ", spickupType=" + pickupType +
+                ", stopHeadsign=" + stopHeadsign + '\'' +
+                ", pickupType=" + pickupType +
                 '}';
     }
-
-
-
 }

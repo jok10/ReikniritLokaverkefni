@@ -2,10 +2,7 @@ package hi.reiknirit;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 public class RouteDataReader {
     public static Map<String, Route> readRoutesFromFile(String filename) throws IOException {
@@ -23,17 +20,19 @@ public class RouteDataReader {
         }
         return routesMap;
     }
-    public static Map<String, StopTime> readStopTimesFromFile(String filename) throws IOException {
-        Map<String, StopTime> stopTimesMap = new HashMap<>();
+    public static List<StopTime> readStopTimesFromFile(String filename) throws IOException {
+        List<StopTime> stopTimesList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             reader.readLine();
             String line;
             while ((line = reader.readLine()) != null) {
                 StopTime stopTime = StopTime.parseStopTime(line);
-                stopTimesMap.put(stopTime.getStopId(), stopTime);
+                if (stopTime.getPickupType() == 0) {
+                    stopTimesList.add(stopTime);
+                }
             }
         }
-        return stopTimesMap;
+        return stopTimesList;
     }
 
     public static Map<String, Trip> readTripsFromFile(String filename) throws IOException {
@@ -68,6 +67,57 @@ public class RouteDataReader {
         return stopsMap;
     }
 
+    public static void main(String[] args) throws IOException {
+        Map<String, Route> routesMap = readRoutesFromFile("routes.txt");
+        List<StopTime> stopTimesList = readStopTimesFromFile("stop_times.txt");
+        Map<String, Trip> routeTripsMap = readTripsFromFile("trips.txt");
+        Map<String, Stop> stopsMap = readStopsFromFile("stops.txt");
 
+        Graph graph = new Graph();
+
+        for (StopTime stopTime : stopTimesList) {
+            String tripId = stopTime.getTripId();
+            Trip trip = routeTripsMap.get(tripId);
+            if (trip != null) {
+                String routeId = trip.getRouteId();
+                Route route = routesMap.get(routeId);
+                if (route != null) {
+                    String startStopId = stopTime.getStopId();
+                    String departureTime = stopTime.getDepartureTime();
+
+                    // Find the next stop for this trip
+                    StopTime nextStopTime = findNextStop(stopTimesList, tripId, stopTime.getStopSequence(), stopTimesList.indexOf(stopTime));
+                    if (nextStopTime != null) {
+                        String endStopId = nextStopTime.getStopId();
+                        String arrivalTime = nextStopTime.getArrivalTime();
+
+                        // Create a new node for this direct connection
+                        Node newNode = new Node(startStopId + "_" + endStopId);
+                        newNode.setDepartureTime(departureTime);
+                        newNode.setArrivalTime(arrivalTime);
+                        newNode.setTripId(tripId);
+                        newNode.setRouteId(routeId);
+                        newNode.setStartStopId(startStopId);
+                        newNode.setEndStopId(endStopId);
+
+                        // Add the new node to the graph
+                        graph.addNode(newNode);
+
+                        // Connect the start and end stops with the new node
+                        graph.addEdge(startStopId, newNode.getId());
+                        graph.addEdge(newNode.getId(), endStopId);
+                    }
+                }
+            }
+        }
+    }
+
+    private static StopTime findNextStop(List<StopTime> stopTimesList, String tripId, int currentStopSequence, int index) {
+        StopTime possiblyNextStop = stopTimesList.get(index+1);
+        if (possiblyNextStop.getTripId().equals(tripId) && possiblyNextStop.getStopSequence() == currentStopSequence + 1) {
+            return possiblyNextStop;
+        }
+        return null;
+    }
 
 }

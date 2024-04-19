@@ -37,7 +37,7 @@ class Edge {
         this.time = time;
     }
 
-    private int parseTime(){
+    public int parseTime(){
         String[] timeStrings = this.time.split(":");
         int timeMinutes = 0;
         timeMinutes +=(Integer.valueOf(timeStrings[0])*60);

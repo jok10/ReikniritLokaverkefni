@@ -16,6 +16,7 @@ public class Graph {
         return nodes.get(stopId);
     }
 
+    //Megum taka þetta function út
     public void addNeighbour(String sourceId, String destinationId, String departureTime, String arrivalTime) {
         if (!nodes.containsKey(sourceId) || !nodes.containsKey(destinationId)) {
             // Handle error: One or both of the nodes do not exist
@@ -25,6 +26,25 @@ public class Graph {
         Node destinationNode = nodes.get(destinationId);
         Edge edge = new Edge(sourceNode, destinationNode, departureTime, arrivalTime);
         sourceNode.addEdge(edge);
+    }
+
+    public void addStop(Node busStop) {
+        nodes.put(busStop.getId(), busStop);
+    }
+    public void addTrip(String tripNodeId, String departureTime, String arrivalTime, String departureStop, String arrivalStop){
+        //Þurfum að bæta við ef strætó stoppistöðin er ekki til
+        Node tripNode = new Node(tripNodeId, "TRIP");
+        Node departureBusStop = nodes.get(departureStop);
+        Node arrivalBusStop = nodes.get(arrivalStop);
+        Edge departureEdge = new Edge(departureBusStop, tripNode, departureTime);
+        Edge arrivalEdge = new Edge(tripNode, arrivalBusStop, arrivalTime);
+        tripNode.addEdge(departureEdge);
+        tripNode.addEdge(arrivalEdge);
+        tripNode.setTimeWeight(departureEdge, arrivalEdge);
+        nodes.put(tripNodeId, tripNode);
+
+        departureBusStop.addEdge(departureEdge);
+        arrivalBusStop.addEdge(arrivalEdge);
     }
 
 
@@ -41,7 +61,7 @@ public class Graph {
             System.out.println(node.getKey() + ":");
             if (node.getValue().getEdges() != null) {
                 for (Edge neighbor : node.getValue().getEdges()) {
-                    String edgeKey = node.getKey() + " -> " + neighbor.getArrivalStop().getId();
+                    String edgeKey = node.getKey() + " -> " + neighbor.getArrivalNode().getId();
                     if (!printedEdges.contains(edgeKey)) {
                         System.out.println("   " + node.getKey() + " -> " + neighbor);
                         printedEdges.add(edgeKey);
@@ -60,7 +80,7 @@ public class Graph {
 
 
             for (Edge edge : node.getEdges()) {
-                System.out.println("  Edge: " + edge.getDepartureStop().getId() +" Departure Time: " + edge.getDepartureTime() + " -> " + edge.getArrivalStop().getId() + " Arrival Time: " + edge.getArrivalTime());
+                System.out.println("  Edge: " + edge.getDepartureNode().getId() +" Departure Time: " + edge.getDepartureTime() + " -> " + edge.getArrivalNode().getId() + " Arrival Time: " + edge.getArrivalTime());
             }
         }
     }
@@ -89,7 +109,7 @@ public class Graph {
             }
 
             for (Edge edge : currentNode.getEdges()) {
-                Node neighborNode = edge.getArrivalStop();
+                Node neighborNode = edge.getArrivalNode();
                 int altDistance = distance.get(currentNode.getId()) + edge.getWeight();
                 if (altDistance < distance.get(neighborNode.getId())) {
                     distance.put(neighborNode.getId(), altDistance);

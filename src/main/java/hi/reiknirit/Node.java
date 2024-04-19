@@ -74,8 +74,8 @@ class Node {
         this.edges = edges;
     }
 
-    public void setTimeWeight(Integer timeWeight) {
-        this.timeWeight = timeWeight;
+    public void setTimeWeight(Edge departureEdge, Edge arrivalEdge) {
+        this.timeWeight = arrivalEdge.parseTime() - departureEdge.parseTime();
     }
 
     public void setRouteId(String routeId) {

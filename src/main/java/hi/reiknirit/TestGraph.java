@@ -13,6 +13,7 @@ public class TestGraph {
 
         Graph graph = createGraph(routeTripsMap, stopTimesList, routesMap, stopsMap);
 
+        //testShortestPath(graph);
         //graph.printGraph();
         //graph.printAllNodesAsLine();
         //graph.printAllNodes();
@@ -57,7 +58,8 @@ public class TestGraph {
         return null;
     }
 
-    /*private static void testShortestPath(Graph graph) {
+    /*
+    private static void testShortestPath(Graph graph) {
         // Test shortest path
         String sourceId = "90000116";
         String destinationId = "90000446";
@@ -67,7 +69,7 @@ public class TestGraph {
         } else {
             System.out.println("No path found from " + sourceId + " to " + destinationId);
         }
-    }*/
-
+    }
+*/
 
 }

@@ -1,7 +1,8 @@
 package hi.reiknirit;
 
 import java.util.*;
-
+import java.util.stream.IntStream;
+import java.lang.Math;
 
 
 public class Graph {
@@ -18,12 +19,22 @@ public class Graph {
         return nodes.get(id);
     }
 
-    public Integer getNodesSize(){
+    public Integer getNumberOfNodes(){
         return nodes.size();
     }
 
-    public Integer getEdgesSize(){
+    public Integer getNumberOfEdges(){
         return edges.size();
+    }
+
+    public Integer getNumberOfBusStops(){
+        Integer busStopCounter = 0;
+        for (Node node : nodes.values()){
+            if (node.getNodeType() == "BUSSTOP"){
+                busStopCounter += 1;
+            }
+        }
+        return busStopCounter;
     }
 
     //Setters
@@ -47,17 +58,162 @@ public class Graph {
     }
 
     public List<Node> findShortestPath(String startId, String endId) {
+        List<Node> busStops = new ArrayList<Node>();
+        for (Node node : nodes.values()) {
+            if (node.getNodeType() == "BUSSTOP") {
+                busStops.add(node);
+            }
+        }
+
+        int rows = this.getNumberOfBusStops();
+        int columns = this.getNumberOfBusStops();
+        int[][] adjacencyMatrix = new int[rows][columns];
+
+        for (Node node : busStops) {
+            Map<Node, Integer> neighbors = new HashMap<Node, Integer>();
+            for (Edge edge : node.getEdges()) {
+                neighbors.put(edge.getArrivalNode(), edge.getArrivalNode().getTimeWeight());
+            }
+            for (Map.Entry<Node, Integer> entry : neighbors.entrySet()) {
+                Node buddy = entry.getKey();
+                Integer weight = entry.getValue();
+                adjacencyMatrix[busStops.indexOf(node)][busStops.indexOf(buddy)] = weight;
+            }
+        }
+
+        int nVertices = adjacencyMatrix[0].length;
+
+        int[] shortestDistances = new int[nVertices];
+
+        // added[i] will true if vertex i is
+        // included / in shortest path tree
+        // or shortest distance from src to
+        // i is finalized
+        boolean[] added = new boolean[nVertices];
+
+        // Initialize all distances as
+        // INFINITE and added[] as false
+        for (int vertexIndex = 0; vertexIndex < nVertices;
+             vertexIndex++)
+        {
+            shortestDistances[vertexIndex] = Integer.MAX_VALUE;
+            added[vertexIndex] = false;
+        }
+
+        // Distance of source vertex from
+        // itself is always 0
+        shortestDistances[Integer.parseInt(startId)] = 0;
+
+        // Parent array to store shortest
+        // path tree
+        List<Node> parents = new ArrayList<Node>();
+
+        // The starting vertex does not
+        // have a parent
+        parents[Integer.parseInt(startId)] = -1;
+
+        // Find shortest path for all
+        // vertices
+        for (int i = 1; i < nVertices; i++)
+        {
+
+            // Pick the minimum distance vertex
+            // from the set of vertices not yet
+            // processed. nearestVertex is
+            // always equal to startNode in
+            // first iteration.
+            int nearestVertex = -1;
+            int shortestDistance = Integer.MAX_VALUE;
+            for (int vertexIndex = 0;
+                 vertexIndex < nVertices;
+                 vertexIndex++)
+            {
+                if (!added[vertexIndex] &&
+                        shortestDistances[vertexIndex] <
+                                shortestDistance)
+                {
+                    nearestVertex = vertexIndex;
+                    shortestDistance = shortestDistances[vertexIndex];
+                }
+            }
+
+            // Mark the picked vertex as
+            // processed
+            added[nearestVertex] = true;
+
+            // Update dist value of the
+            // adjacent vertices of the
+            // picked vertex.
+            for (int vertexIndex = 0;
+                 vertexIndex < nVertices;
+                 vertexIndex++)
+            {
+                int edgeDistance = adjacencyMatrix[nearestVertex][vertexIndex];
+
+                if (edgeDistance > 0
+                        && ((shortestDistance + edgeDistance) <
+                        shortestDistances[vertexIndex]))
+                {
+                    parents[vertexIndex] = nearestVertex;
+                    shortestDistances[vertexIndex] = shortestDistance +
+                            edgeDistance;
+                }
+            }
+        }
+
+        return parents;
+
+        /*
+        //Don't use this code!
+        List<Node> shortestPath = new ArrayList<Node>();
+
+        int rows = this.getNumberOfBusStops() + 1;
+        int columns = this.getNumberOfBusStops();
+        int[][] matrix = new int[rows][columns];
+        for (int i = 0; i < rows; i++){
+            for (int j = 1; j < columns; j++){
+                matrix[i][j] = -1;
+            }
+        }
+
+        matrix[0][0] = Integer.parseInt(startId);
+
+        int endStop = Integer.parseInt(endId);
+
+        for (int iterations = 1; iterations < rows; iterations++) {
+            int index = iterations - 1;
+            String nodeId = String.valueOf(matrix[0][index]);
+            Node node = this.getNode(nodeId);
+            for (Edge edge : node.getEdges()) {
+                int weight = edge.getArrivalNode().getTimeWeight();
+                Node destination = edge.getArrivalNode().getEdges().get(0).getArrivalNode();
+
+                if (IntStream.of(matrix[0]).anyMatch(x -> x == Integer.parseInt(destination.getId()))){
+                    int tempIndex = Arrays.binarySearch(matrix[0], Integer.parseInt(destination.getId()));
+                    matrix[iterations][tempIndex] = Math.min(matrix[iterations][index] + weight, matrix[iterations][tempIndex]);
+                } else {
+                    int killer = 0;
+                    while (matrix[0][killer] > 0) {
+                        killer++;
+                    }
+                    matrix[0][killer] = Integer.parseInt(destination.getId());
+                    matrix[iterations][killer] = matrix[iterations][index] + weight;
+                }
+            }
+        }
+*/
+
+
+        /*
         Map<String, Integer> distance = new HashMap<>();
         Map<String, Node> previous = new HashMap<>();
         PriorityQueue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(distance::get));
-
 
         for (String nodeId : nodes.keySet()) {
             distance.put(nodeId, Integer.MAX_VALUE);
             previous.put(nodeId, null);
         }
         distance.put(startId, 0);
-
 
         queue.add(nodes.get(startId));
 
@@ -91,6 +247,7 @@ public class Graph {
         Collections.reverse(shortestPath);
 
         return shortestPath;
+        */
     }
 
 

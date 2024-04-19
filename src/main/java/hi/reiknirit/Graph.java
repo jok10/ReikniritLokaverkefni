@@ -2,6 +2,8 @@ package hi.reiknirit;
 
 import java.util.*;
 
+
+
 public class Graph {
     private Map<String, Node> nodes;
     private List<Edge> edges;
@@ -41,6 +43,7 @@ public class Graph {
         tripNode.addEdge(departureEdge);
         tripNode.addEdge(arrivalEdge);
         tripNode.setTimeWeight(departureEdge, arrivalEdge);
+        System.out.println("Time");
 
         edges.add(departureEdge);
         edges.add(arrivalEdge);
@@ -51,54 +54,19 @@ public class Graph {
         arrivalBusStop.addEdge(arrivalEdge);
     }
 
-    public void printAllNodes() {
-        System.out.println("Nodes in the graph:");
-        for (Node node : nodes.values()) {
-            System.out.println(node);
-        }
-    }
-
-    public void printAllNodesAsLine() {
-        Set<String> printedEdges = new HashSet<>();
-        for (Map.Entry<String, Node> node : nodes.entrySet()) {
-            System.out.println(node.getKey() + ":");
-            if (node.getValue().getEdges() != null) {
-                for (Edge neighbor : node.getValue().getEdges()) {
-                    String edgeKey = node.getKey() + " -> " + neighbor.getArrivalNode().getId();
-                    if (!printedEdges.contains(edgeKey)) {
-                        System.out.println("   " + node.getKey() + " -> " + neighbor);
-                        printedEdges.add(edgeKey);
-                    }
-                }
-            }
-        }
-    }
-
-   /* public void printGraph() {
-        System.out.println("Graph:");
-
-        for (Node node : nodes.values()) {
-            System.out.println("Node: " + node.getId() + " Route: "+ node.getRouteId());
-
-            for (Edge edge : node.getEdges()) {
-                System.out.println("  Edge: " + edge.getDepartureNode().getId() +" Departure Time: " + edge.getDepartureTime() + " -> " + edge.getArrivalNode().getId() + " Arrival Time: " + edge.getArrivalTime());
-            }
-        }
-    }*/
-
-    /*public List<Node> findShortestPath(String startId, String endId) {
+    public List<Node> findShortestPath(String startId, String endId) {
         Map<String, Integer> distance = new HashMap<>();
         Map<String, Node> previous = new HashMap<>();
         PriorityQueue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(distance::get));
 
-        // Initialize distance for all nodes to infinity, except the start node
+
         for (String nodeId : nodes.keySet()) {
             distance.put(nodeId, Integer.MAX_VALUE);
             previous.put(nodeId, null);
         }
         distance.put(startId, 0);
 
-        // Add start node to the queue
+
         queue.add(nodes.get(startId));
 
         // Dijkstra's algorithm
@@ -106,12 +74,13 @@ public class Graph {
             Node currentNode = queue.poll();
 
             if (currentNode.getId().equals(endId)) {
-                break; // Found the shortest path to the destination
+                break; // Fann nóðuna
             }
 
             for (Edge edge : currentNode.getEdges()) {
                 Node neighborNode = edge.getArrivalNode();
-                int altDistance = distance.get(currentNode.getId()) + edge.getWeight();
+                int altDistance = distance.get(currentNode.getId()) + neighborNode.getTimeWeight();
+
                 if (altDistance < distance.get(neighborNode.getId())) {
                     distance.put(neighborNode.getId(), altDistance);
                     previous.put(neighborNode.getId(), currentNode);
@@ -130,14 +99,64 @@ public class Graph {
         Collections.reverse(shortestPath);
 
         return shortestPath;
-    }*/
+    }
 
-    private StopTime findNextStop(Map<String, StopTime> stopTimesMap, String tripId, int currentStopSequence) {
-        for (StopTime stopTime : stopTimesMap.values()) {
-            if (stopTime.getTripId().equals(tripId) && stopTime.getStopSequence() == currentStopSequence + 1) {
-                return stopTime;
+
+    public void printAllNodesAsLine() {
+        Set<String> printedEdges = new HashSet<>();
+        for (Map.Entry<String, Node> node : nodes.entrySet()) {
+            System.out.println(node.getKey() + ":");
+            if (node.getValue().getEdges() != null) {
+                for (Edge neighbor : node.getValue().getEdges()) {
+                    String edgeKey = node.getKey() + " -> " + neighbor.getArrivalNode().getId() ;
+                    if (!printedEdges.contains(edgeKey)) {
+                        System.out.println("   " + node.getKey() + " -> " + neighbor + " Time: " + neighbor.getTime());
+                        printedEdges.add(edgeKey);
+                    }
+                }
             }
         }
-        return null;
     }
+
+    public static String padRight(int n) {
+        return " ".repeat(n);
+    }
+
+    public static void printASCII(String startStop, String departureTime, List<String> stopsBetween, String endStop, String arrivalTime) {
+
+        int startStopLength = ("Start Stop: " + startStop).length();
+        int departureTimeLength = ("Departure Time: " + departureTime).length();
+        int endStopLength = ("End Stop: " + endStop).length();
+        int arrivalTimeLength = ("Arrival Time: " + arrivalTime).length();
+
+        int maxStringLength = Math.max(Math.max(startStopLength, endStopLength), Math.max(departureTimeLength, arrivalTimeLength));
+        for (String stop : stopsBetween) {
+            maxStringLength = Math.max(maxStringLength, stop.length() + 1);
+        }
+
+        int lineLength = maxStringLength;
+
+        String dashes = "-".repeat(lineLength+2);
+
+        System.out.println(" " + dashes);
+        System.out.println("/" + padRight( lineLength+2) + "\\");
+
+        System.out.println("|  Start Stop: " + startStop + padRight(lineLength - startStopLength) + "|");
+        System.out.println("|  Departure Time: " + departureTime + padRight( lineLength - departureTimeLength) + "|");
+        System.out.println("|"   + padRight( lineLength+2) + "|");
+
+        for (String stop : stopsBetween) {
+            System.out.println("|  -" + stop + padRight(lineLength - stop.length()-1) + "|");
+        }
+
+        System.out.println("|"   + padRight( lineLength+2) + "|");
+        System.out.println("|  End Stop: " + endStop + padRight(lineLength - endStopLength) + "|");
+        System.out.println("|  Arrival Time: " + arrivalTime + padRight( lineLength - arrivalTimeLength) + "|");
+        System.out.println("|"   + padRight( lineLength+2) + "|");
+
+        System.out.println("\\"+dashes+"/");
+    }
+
+
+
 }

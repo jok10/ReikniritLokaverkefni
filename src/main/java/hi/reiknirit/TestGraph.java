@@ -11,7 +11,7 @@ public class TestGraph {
         Map<String, Trip> routeTripsMap = RouteDataReader.readTripsFromFile("trips.txt");
         Map<String, Stop> stopsMap = RouteDataReader.readStopsFromFile("stops.txt");
 
-        Graph graph = createGraph(stopTimesList, routeTripsMap, stopsMap, routesMap);
+        Graph graph = createGraph(routeTripsMap, stopTimesList, routesMap, stopsMap);
 
         //graph.printGraph();
 
@@ -22,14 +22,18 @@ public class TestGraph {
         //testShortestPath(graph);
     }
 
-    private static Graph createGraph(List<StopTime> stopTimesList, Map<String, Trip> routeTripsMap,Map<String, Stop> stopsMap, Map<String, Route> routesMap) {
+    private static Graph createGraph(Map<String, Trip> routeTripsMap, List<StopTime> stopTimesList, Map<String, Route> routesMap, Map<String, Stop> stopsMap) {
         Graph graph = new Graph();
-        //fara í gegnum allar stops og setja í grafið
+        //Start by adding all bus stops to our empty graph
         for (Stop stop : stopsMap.values()) {
-            Node stopNode = new Node(stop.getStopId(), "STOP");
-            graph.addNode(stopNode);
+            Node stopNode = new Node(stop.getStopId(), "BUSSTOP");
+            stopNode.setStopName(stop.getStopName());
+            stopNode.setStopLat(stop.getStopLat());
+            stopNode.setStopLon(stop.getStopLon());
+            graph.addStop(stopNode);
         }
 
+        //Then we take all the trips and add them to the graph as well
        for (StopTime stopTime : stopTimesList) {
             String tripId = stopTime.getTripId();
             Trip trip = routeTripsMap.get(tripId);
@@ -38,9 +42,9 @@ public class TestGraph {
                 StopTime nextStopTime = findNextStop(stopTimesList, tripId, stopTime.getStopSequence(), stopTimesList.indexOf(stopTime));
                 if (nextStopTime != null) {
                     Stop endStop = stopsMap.get(nextStopTime.getStopId());
-
-                    // Búa til trip nóðu á milli stoppana
-                    graph.addTrip(tripId, stopTime.getDepartureTime(), nextStopTime.getArrivalTime(), startStop.getStopId(), endStop.getStopId());
+                    Node tripNode = new Node(stopTime.getTripId() + "_" + stopTime.getStopSequence(), "TRIP");
+                    tripNode.setRouteId(trip.getRouteId());
+                    graph.addTrip(tripNode, stopTime.getDepartureTime(), nextStopTime.getArrivalTime(), startStop.getStopId(), endStop.getStopId());
                 }
             }
         }

@@ -14,7 +14,9 @@ public class TestGraph {
         Graph graph = createGraph(routeTripsMap, stopTimesList, routesMap, stopsMap);
 
         //graph.printGraph();
-        //graph.printAllNodesAsLine();
+        graph.printAllNodesAsLine();
+        Node highestNode = graph.getNodeWithHighestOutdegree();
+        System.out.println("Nóða með hæstu útgráðuna: " + highestNode.getId() + " Og hefur: " +highestNode.getOutdegree() +" leggi");
         //graph.printAllNodes();
         //testShortestPath(graph);
     }

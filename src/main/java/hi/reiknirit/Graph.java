@@ -94,7 +94,7 @@ public class Graph {
     }
 
 
-    public void printAllNodesAsLine() {
+    /*public void printAllNodesAsLine() {
         Set<String> printedEdges = new HashSet<>();
         for (Map.Entry<String, Node> node : nodes.entrySet()) {
             System.out.println(node.getKey() + ":");
@@ -102,10 +102,39 @@ public class Graph {
                 for (Edge neighbor : node.getValue().getEdges()) {
                     String edgeKey = node.getKey() + " -> " + neighbor.getArrivalNode().getId() ;
                     if (!printedEdges.contains(edgeKey)) {
-                        System.out.println("   " + node.getKey() + " -> " + neighbor + " Time: " + neighbor.getTime());
+                        System.out.println("   " + node.getKey() + " -> " + neighbor.getArrivalNode().getId() + " Time: " + neighbor.getTime());
                         printedEdges.add(edgeKey);
                     }
                 }
+            }
+        }
+    }*/
+
+    public void printAllNodesAsLine() {
+        Set<String> printedEdges = new HashSet<>();
+        for (Map.Entry<String, Node> nodeEntry : nodes.entrySet()) {
+            Node currentNode = nodeEntry.getValue();
+            System.out.println("Node: " + currentNode.getId());
+
+            if (currentNode.getEdges() != null) {
+                for (Edge neighbor : currentNode.getEdges()) {
+                    String edgeKey = currentNode.getId() + " -> " + neighbor.getArrivalNode().getId();
+                    if (!printedEdges.contains(edgeKey)) {
+                        System.out.println("   Edge: " + neighbor.getDepartureNode().getId() +
+                                " -> " + neighbor.getArrivalNode().getId() +
+                                " Time: " + neighbor.getTime());
+                        printedEdges.add(edgeKey);
+                    }
+                }
+            }
+
+            // Print details about trip nodes
+            if ("TRIP".equals(currentNode.getNodeType())) {
+                System.out.println("   Trip Node Details:");
+                System.out.println("     ID: " + currentNode.getId());
+                System.out.println("     Route ID: " + currentNode.getRouteId());
+                System.out.println("     Time Weight: " + currentNode.getTimeWeight());
+                // You can add more details here if needed
             }
         }
     }
@@ -148,6 +177,24 @@ public class Graph {
 
         System.out.println("\\"+dashes+"/");
     }
+
+    public Node getNodeWithHighestOutdegree() {
+        int maxOutdegree = 0;
+        Node retNode = null;
+
+        for (Map.Entry<String, Node> nodeEntry : nodes.entrySet()) {
+            Node currentNode = nodeEntry.getValue();
+            int outdegree = currentNode.getOutdegree();
+            // Update maxOutdegree and nodeIdWithMaxOutdegree
+            if (outdegree > maxOutdegree) {
+                maxOutdegree = outdegree;
+                retNode = currentNode;
+            }
+        }
+
+        return retNode;
+    }
+
 
 
 

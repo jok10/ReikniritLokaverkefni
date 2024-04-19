@@ -94,7 +94,7 @@ public class Graph {
     }
 
 
-    /*public void printAllNodesAsLine() {
+    public void printAllNodesAsLine() {
         Set<String> printedEdges = new HashSet<>();
         for (Map.Entry<String, Node> node : nodes.entrySet()) {
             System.out.println(node.getKey() + ":");
@@ -102,15 +102,15 @@ public class Graph {
                 for (Edge neighbor : node.getValue().getEdges()) {
                     String edgeKey = node.getKey() + " -> " + neighbor.getArrivalNode().getId() ;
                     if (!printedEdges.contains(edgeKey)) {
-                        System.out.println("   " + node.getKey() + " -> " + neighbor.getArrivalNode().getId() + " Time: " + neighbor.getTime());
+                        System.out.println("   " + node.getKey() + " -> " + neighbor.getArrivalNode().getId());
                         printedEdges.add(edgeKey);
                     }
                 }
             }
         }
-    }*/
+    }
 
-    public void printAllNodesAsLine() {
+    /*public void printAllNodesAsLine() {
         Set<String> printedEdges = new HashSet<>();
         for (Map.Entry<String, Node> nodeEntry : nodes.entrySet()) {
             Node currentNode = nodeEntry.getValue();
@@ -137,7 +137,7 @@ public class Graph {
                 // You can add more details here if needed
             }
         }
-    }
+    }*/
 
     public static String padRight(int n) {
         return " ".repeat(n);

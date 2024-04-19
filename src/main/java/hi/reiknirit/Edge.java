@@ -1,83 +1,52 @@
 package hi.reiknirit;
 
 class Edge {
-    public Node getDepartureStop() {
-        return departureStop;
+    private Node departureNode;
+    private Node arrivalNode;
+    private String time;
+
+    public Edge(Node node1, Node node2, String time) {
+        this.departureNode = node1;
+        this.arrivalNode = node2;
+        this.time = time;
     }
 
-    public void setDepartureStop(Node departureStop) {
-        this.departureStop = departureStop;
+    //Getters
+    public Node getDepartureNode() {
+        return departureNode;
     }
 
-    public Node getArrivalStop() {
-        return arrivalStop;
+    public Node getArrivalNode() {
+        return arrivalNode;
     }
 
-    public void setArrivalStop(Node arrivalStop) {
-        this.arrivalStop = arrivalStop;
+    public String getTime() {
+        return time;
     }
 
-    public String getDepartureTime() {
-        return departureTime;
+    //Setters
+    public void setDepartureNode(Node departureNode) {
+        this.departureNode = departureNode;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    public void setArrivalNode(Node arrivalNode) {
+        this.arrivalNode = arrivalNode;
     }
 
-    public String getArrivalTime() {
-        return arrivalTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-    public int getWeight() {
-        return weight;
-    }
-
-    private Node departureStop;
-    private Node arrivalStop;
-    private String departureTime;
-    private String arrivalTime;
-
-
-
-    private int weight;
-
-    public Edge(Node stop1, Node stop2, String stopTime1, String stopTime2) {
-        this.departureStop = stop1;
-        this.arrivalStop = stop2;
-        this.departureTime = stopTime1;
-        this.arrivalTime = stopTime2;
-        generateWeight();
-    }
-
-    private int parseDepartureTime(){
-        String[] departureTimeParts = this.departureTime.split(":");
-        int departureTimeMinutes = 0;
-        departureTimeMinutes +=(Integer.valueOf(departureTimeParts[0])*60);
-        departureTimeMinutes +=(Integer.valueOf((departureTimeParts[1])));
-        return departureTimeMinutes;
-    }
-
-    private int parseArrivalTime(){
-        String[] arrivalTimeParts = this.arrivalTime.split(":");
-        int arrivalTimeMinutes = 0;
-        arrivalTimeMinutes +=(Integer.valueOf(arrivalTimeParts[0])*60);
-        arrivalTimeMinutes +=(Integer.valueOf((arrivalTimeParts[1])));
-        return arrivalTimeMinutes;
-    }
-        private void generateWeight(){
-            this.weight = parseDepartureTime()-parseArrivalTime();
+    private int parseTime(){
+        String[] timeStrings = this.time.split(":");
+        int timeMinutes = 0;
+        timeMinutes +=(Integer.valueOf(timeStrings[0])*60);
+        timeMinutes +=(Integer.valueOf((timeStrings[1])));
+        return timeMinutes;
     }
 
     @Override
     public String toString() {
-        return arrivalStop.getId();
+        return arrivalNode.getId();
     }
 }

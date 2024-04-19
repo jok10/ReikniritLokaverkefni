@@ -3,19 +3,29 @@ package hi.reiknirit;
 import java.util.*;
 
 class Node {
+    //If the nodeType is BUSSTOP, the id should be the stop_id
+    //Else if the nodeType is TRIP, the id should be the trip_id + stop_sequence
     private String id;
-    private String departureTime;
-    private String arrivalTime;
-    private String tripId;
-    private String routeId;
-    private String stopId;
-    private String endStopId;
+    private String nodeType;
     private List<Edge> edges;
 
+    //If the node is of type TRIP, it needs to contain timeWeight and routeId
+    private Integer timeWeight;
+    private String routeId;
 
-    public Node(String id) {
+    //If the node is of type BUSSTOP, it needs to contain the coordinates and stopName
+    private String stopName;
+    private Double stopLat;
+    private Double stopLon;
+
+
+    public Node(String id, String nodeType) {
+        //The node type indicates weather the node is a bus stop or a trip node
+        //NodeType can either be BUSSTOP or TRIP
         this.id = id;
+        this.nodeType = nodeType;
         this.edges = new ArrayList<>();
+
     }
 
     // Getters
@@ -23,32 +33,32 @@ class Node {
         return id;
     }
 
-    public String getDepartureTime() {
-        return departureTime;
+    public String getNodeType() {
+        return nodeType;
     }
 
-    public String getArrivalTime() {
-        return arrivalTime;
+    public List<Edge> getEdges() {
+        return edges;
     }
 
-    public String getTripId() {
-        return tripId;
+    public Integer getTimeWeight() {
+        return timeWeight;
     }
 
     public String getRouteId() {
         return routeId;
     }
 
-    public String getStopId() {
-        return stopId;
+    public String getStopName() {
+        return stopName;
     }
 
-    public String getEndStopId() {
-        return endStopId;
+    public Double getStopLat() {
+        return stopLat;
     }
 
-    public List<Edge> getEdges() {
-        return edges;
+    public Double getStopLon() {
+        return stopLon;
     }
 
     // Setters
@@ -56,28 +66,32 @@ class Node {
         this.id = id;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    public void setNodeType(String nodeType) {
+        this.nodeType = nodeType;
     }
 
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
+    public void setEdges(List<Edge> edges) {
+        this.edges = edges;
     }
 
-    public void setTripId(String tripId) {
-        this.tripId = tripId;
+    public void setTimeWeight(Integer timeWeight) {
+        this.timeWeight = timeWeight;
     }
 
     public void setRouteId(String routeId) {
         this.routeId = routeId;
     }
 
-    public void setStopId(String stopId) {
-        this.stopId = stopId;
+    public void setStopName(String stopName) {
+        this.stopName = stopName;
     }
 
-    public void setEndStopId(String endStopId) {
-        this.endStopId = endStopId;
+    public void setStopLat(Double stopLat) {
+        this.stopLat = stopLat;
+    }
+
+    public void setStopLon(Double stopLon) {
+        this.stopLon = stopLon;
     }
 
     // Other methods
@@ -88,7 +102,7 @@ class Node {
     public int getOutdegree() {
         Set<String> edgeIds = new HashSet<>();
         for (Edge edge : edges) {
-            edgeIds.add(edge.getArrivalStop().getId());
+            edgeIds.add(edge.getArrivalNode().getId());
         }
         return edgeIds.size();
     }
@@ -97,12 +111,10 @@ class Node {
         StringBuilder retString = new StringBuilder();
         retString.append("Node id: ").append(this.id).append(", edges for node: ");
 
-
         Set<String> edgeIds = new HashSet<>();
         for (Edge edge : edges) {
-            edgeIds.add(edge.getArrivalStop().getId());
+            edgeIds.add(edge.getArrivalNode().getId());
         }
-
 
         for (String edgeId : edgeIds) {
             retString.append(edgeId).append(", ");
@@ -110,20 +122,5 @@ class Node {
 
         return retString.toString();
     }
-
-
-
-
-    @Override
-    public String toString() {
-        return "Node{" +
-                "stopid='" + id + '\'' +
-
-                ", tripId='" + tripId + '\'' +
-                ", routeId='" + routeId + '\'' +
-                ", number of neighbors='" + getOutdegree() + '\'' +
-                '}';
-    }
-
 
 }

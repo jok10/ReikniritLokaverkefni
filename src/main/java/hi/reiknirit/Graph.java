@@ -36,7 +36,6 @@ public class Graph {
         Node arrivalBusStop = nodes.get(arrivalStop);
         Edge departureEdge = new Edge(departureBusStop, tripNode, departureTime);
         Edge arrivalEdge = new Edge(tripNode, arrivalBusStop, arrivalTime);
-        tripNode.addEdge(departureEdge);
         tripNode.addEdge(arrivalEdge);
         tripNode.setTimeWeight(departureEdge, arrivalEdge);
 
@@ -44,9 +43,7 @@ public class Graph {
         edges.add(arrivalEdge);
         nodes.put(tripNode.getId(), tripNode);
 
-
         departureBusStop.addEdge(departureEdge);
-        arrivalBusStop.addEdge(arrivalEdge);
     }
 
     public List<Node> findShortestPath(String startId, String endId) {

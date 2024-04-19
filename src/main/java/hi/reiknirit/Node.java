@@ -100,11 +100,7 @@ class Node {
     }
 
     public int getOutdegree() {
-        Set<String> edgeIds = new HashSet<>();
-        for (Edge edge : edges) {
-            edgeIds.add(edge.getArrivalNode().getId());
-        }
-        return edgeIds.size();
+        return edges.size();
     }
 
     public String printAsLine() {

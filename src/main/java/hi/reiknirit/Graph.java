@@ -4,33 +4,31 @@ import java.util.*;
 
 public class Graph {
     private Map<String, Node> nodes;
+    private List<Edge> edges;
 
     public Graph() {
         this.nodes = new HashMap<>();
+        this.edges = new ArrayList<>();
     }
 
-    public void addNode(Node node) {
-        nodes.put(node.getId(), node);
-    }
-    public Node getNode(String stopId) {
-        return nodes.get(stopId);
+    //Getters
+    public Node getNode(String id) {
+        return nodes.get(id);
     }
 
-    //Megum taka þetta function út
-    public void addNeighbour(String sourceId, String destinationId, String departureTime, String arrivalTime) {
-        if (!nodes.containsKey(sourceId) || !nodes.containsKey(destinationId)) {
-            // Handle error: One or both of the nodes do not exist
-            return;
-        }
-        Node sourceNode = nodes.get(sourceId);
-        Node destinationNode = nodes.get(destinationId);
-        Edge edge = new Edge(sourceNode, destinationNode, departureTime, arrivalTime);
-        sourceNode.addEdge(edge);
+    public Integer getNodesSize(){
+        return nodes.size();
     }
 
+    public Integer getEdgesSize(){
+        return edges.size();
+    }
+
+    //Setters
     public void addStop(Node busStop) {
         nodes.put(busStop.getId(), busStop);
     }
+
     public void addTrip(String tripNodeId, String departureTime, String arrivalTime, String departureStop, String arrivalStop){
         //Þurfum að bæta við ef strætó stoppistöðin er ekki til
         Node tripNode = new Node(tripNodeId, "TRIP");
@@ -41,12 +39,15 @@ public class Graph {
         tripNode.addEdge(departureEdge);
         tripNode.addEdge(arrivalEdge);
         tripNode.setTimeWeight(departureEdge, arrivalEdge);
+
+        edges.add(departureEdge);
+        edges.add(arrivalEdge);
         nodes.put(tripNodeId, tripNode);
+
 
         departureBusStop.addEdge(departureEdge);
         arrivalBusStop.addEdge(arrivalEdge);
     }
-
 
     public void printAllNodes() {
         System.out.println("Nodes in the graph:");
@@ -74,10 +75,8 @@ public class Graph {
     public void printGraph() {
         System.out.println("Graph:");
 
-
         for (Node node : nodes.values()) {
             System.out.println("Node: " + node.getId() + " Route: "+ node.getRouteId());
-
 
             for (Edge edge : node.getEdges()) {
                 System.out.println("  Edge: " + edge.getDepartureNode().getId() +" Departure Time: " + edge.getDepartureTime() + " -> " + edge.getArrivalNode().getId() + " Arrival Time: " + edge.getArrivalTime());

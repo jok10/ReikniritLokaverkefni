@@ -68,4 +68,8 @@ public class RouteDataReader {
         return stopsMap;
     }
 
+    private Node node1 = new Node("1234");
+
+
+
 }

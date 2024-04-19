@@ -75,4 +75,9 @@ class Edge {
         private void generateWeight(){
             this.weight = parseDepartureTime()-parseArrivalTime();
     }
+
+    @Override
+    public String toString() {
+        return arrivalStop.getId();
+    }
 }

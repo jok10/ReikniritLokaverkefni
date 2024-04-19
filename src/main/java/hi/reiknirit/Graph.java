@@ -36,11 +36,16 @@ public class Graph {
     }
 
     public void printAllNodesAsLine() {
+        Set<String> printedEdges = new HashSet<>();
         for (Map.Entry<String, Node> node : nodes.entrySet()) {
             System.out.println(node.getKey() + ":");
-            if (node.getValue().getListOfNeighborIDs() != null){
-                for (String neighbor : node.getValue().getListOfNeighborIDs()){
-                    System.out.println("   " + node.getKey() + " -> " + neighbor);
+            if (node.getValue().getEdges() != null) {
+                for (Edge neighbor : node.getValue().getEdges()) {
+                    String edgeKey = node.getKey() + " -> " + neighbor.getArrivalStop().getId();
+                    if (!printedEdges.contains(edgeKey)) {
+                        System.out.println("   " + node.getKey() + " -> " + neighbor);
+                        printedEdges.add(edgeKey);
+                    }
                 }
             }
         }

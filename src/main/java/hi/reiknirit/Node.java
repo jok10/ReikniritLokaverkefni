@@ -13,9 +13,6 @@ class Node {
     private List<Edge> edges;
 
 
-
-    private List<String> listOfNeighborIDs;
-
     public Node(String id) {
         this.id = id;
         this.edges = new ArrayList<>();
@@ -81,14 +78,6 @@ class Node {
 
     public void setEndStopId(String endStopId) {
         this.endStopId = endStopId;
-    }
-
-    public List<String> getListOfNeighborIDs() {
-        return listOfNeighborIDs;
-    }
-
-    public void setListOfNeighborIDs(List<String> listOfNeighborIDs) {
-        this.listOfNeighborIDs = listOfNeighborIDs;
     }
 
     // Other methods

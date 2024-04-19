@@ -15,8 +15,8 @@ public class TestGraph {
 
         //graph.printGraph();
 
-        //graph.printAllNodesAsLine();
-        graph.printAllNodes();
+        graph.printAllNodesAsLine();
+        //graph.printAllNodes();
 
 
         //testShortestPath(graph);

@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="TestGraph" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="hi.reiknirit.TestGraph" />
-    <module name="Streato" />
+    <module name="ReikniritLokaverkefni" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="hi.reiknirit.*" />

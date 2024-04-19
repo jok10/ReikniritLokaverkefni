@@ -27,6 +27,7 @@ public class RouteDataReader {
             String line;
             while ((line = reader.readLine()) != null) {
                 StopTime stopTime = StopTime.parseStopTime(line);
+                // If statement that filters out trips we don't need
                 if (stopTime.getPickupType() == 0) {
                     stopTimesList.add(stopTime);
                 }

@@ -36,8 +36,13 @@ public class Graph {
     }
 
     public void printAllNodesAsLine() {
-        for (Map.Entry<String,Node> entry : nodes.entrySet()) {
-            System.out.println(entry.getValue().printAsLine());
+        for (Map.Entry<String, Node> node : nodes.entrySet()) {
+            System.out.println(node.getKey() + ":");
+            if (node.getValue().getListOfNeighborIDs() != null){
+                for (String neighbor : node.getValue().getListOfNeighborIDs()){
+                    System.out.println("   " + node.getKey() + " -> " + neighbor);
+                }
+            }
         }
     }
 

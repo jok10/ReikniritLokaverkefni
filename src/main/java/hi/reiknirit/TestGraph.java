@@ -1,6 +1,7 @@
 package hi.reiknirit;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,8 @@ public class TestGraph {
         graph.printAllNodesAsLine();
         Node highestNode = graph.getNodeWithHighestOutdegree();
         System.out.println("Nóða með hæstu útgráðuna: " + highestNode.getId() + " Og hefur: " +highestNode.getOutdegree() +" leggi");
+        List<String> millistop = Arrays.asList("90000775");
+        graph.printASCII("90020295", "10:00",millistop,"90000713","10:10");
         //graph.printAllNodes();
         //testShortestPath(graph);
     }

@@ -143,11 +143,21 @@ public class Graph {
         return " ".repeat(n);
     }
 
-    public static void printASCII(String startStop, String departureTime, List<String> stopsBetween, String endStop, String arrivalTime) {
+    public void printASCII(String startStop, String departureTime, List<String> stopsBetween, String endStop, String arrivalTime) {
+        String startStopName = nodes.containsKey(startStop) ? nodes.get(startStop).getStopName() : "Unknown";
+        String endStopName = nodes.containsKey(endStop) ? nodes.get(endStop).getStopName() : "Unknown";
+        List<String> stopNamesBetween = new ArrayList<>();
+        for (String stopId : stopsBetween) {
+            if (nodes.containsKey(stopId)) {
+                stopNamesBetween.add(nodes.get(stopId).getStopName());
+            } else {
+                stopNamesBetween.add("Unknown");
+            }
+        }
 
-        int startStopLength = ("Start Stop: " + startStop).length();
+        int startStopLength = ("Start Stop: " + startStopName).length();
         int departureTimeLength = ("Departure Time: " + departureTime).length();
-        int endStopLength = ("End Stop: " + endStop).length();
+        int endStopLength = ("End Stop: " + endStopName).length();
         int arrivalTimeLength = ("Arrival Time: " + arrivalTime).length();
 
         int maxStringLength = Math.max(Math.max(startStopLength, endStopLength), Math.max(departureTimeLength, arrivalTimeLength));
@@ -162,16 +172,16 @@ public class Graph {
         System.out.println(" " + dashes);
         System.out.println("/" + padRight( lineLength+2) + "\\");
 
-        System.out.println("|  Start Stop: " + startStop + padRight(lineLength - startStopLength) + "|");
+        System.out.println("|  Start Stop: " + startStopName + padRight(lineLength - startStopLength) + "|");
         System.out.println("|  Departure Time: " + departureTime + padRight( lineLength - departureTimeLength) + "|");
         System.out.println("|"   + padRight( lineLength+2) + "|");
 
-        for (String stop : stopsBetween) {
+        for (String stop : stopNamesBetween) {
             System.out.println("|  -" + stop + padRight(lineLength - stop.length()-1) + "|");
         }
 
         System.out.println("|"   + padRight( lineLength+2) + "|");
-        System.out.println("|  End Stop: " + endStop + padRight(lineLength - endStopLength) + "|");
+        System.out.println("|  End Stop: " + endStopName + padRight(lineLength - endStopLength) + "|");
         System.out.println("|  Arrival Time: " + arrivalTime + padRight( lineLength - arrivalTimeLength) + "|");
         System.out.println("|"   + padRight( lineLength+2) + "|");
 

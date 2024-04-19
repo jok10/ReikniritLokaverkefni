@@ -18,11 +18,9 @@ public class Graph {
         return nodes.get(id);
     }
 
-
     public Integer getNodesSize(){
         return nodes.size();
     }
-
 
     public Integer getEdgesSize(){
         return edges.size();
@@ -33,9 +31,8 @@ public class Graph {
         nodes.put(busStop.getId(), busStop);
     }
 
-    public void addTrip(String tripNodeId, String departureTime, String arrivalTime, String departureStop, String arrivalStop){
+    public void addTrip(Node tripNode, String departureTime, String arrivalTime, String departureStop, String arrivalStop){
         //Þurfum að bæta við ef strætó stoppistöðin er ekki til
-        Node tripNode = new Node(tripNodeId, "TRIP");
         Node departureBusStop = nodes.get(departureStop);
         Node arrivalBusStop = nodes.get(arrivalStop);
         Edge departureEdge = new Edge(departureBusStop, tripNode, departureTime);
@@ -47,7 +44,7 @@ public class Graph {
 
         edges.add(departureEdge);
         edges.add(arrivalEdge);
-        nodes.put(tripNodeId, tripNode);
+        nodes.put(tripNode.getId(), tripNode);
 
 
         departureBusStop.addEdge(departureEdge);

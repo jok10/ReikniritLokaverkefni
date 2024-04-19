@@ -84,6 +84,8 @@ public class Graph {
         int nVertices = adjacencyMatrix[0].length;
 
         int[] shortestDistances = new int[nVertices];
+        List<Node> shortestPath = new ArrayList<Node>();
+        /*
 
         // added[i] will true if vertex i is
         // included / in shortest path tree
@@ -160,8 +162,8 @@ public class Graph {
                 }
             }
         }
-
-        return parents;
+*/
+        return shortestPath;
 
         /*
         //Don't use this code!

@@ -32,7 +32,6 @@ public class Graph {
     }
 
     public void addTrip(Node tripNode, String departureTime, String arrivalTime, String departureStop, String arrivalStop){
-        //Þurfum að bæta við ef strætó stoppistöðin er ekki til
         Node departureBusStop = nodes.get(departureStop);
         Node arrivalBusStop = nodes.get(arrivalStop);
         Edge departureEdge = new Edge(departureBusStop, tripNode, departureTime);
@@ -40,7 +39,6 @@ public class Graph {
         tripNode.addEdge(departureEdge);
         tripNode.addEdge(arrivalEdge);
         tripNode.setTimeWeight(departureEdge, arrivalEdge);
-        System.out.println("Time");
 
         edges.add(departureEdge);
         edges.add(arrivalEdge);

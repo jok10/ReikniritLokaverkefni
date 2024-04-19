@@ -3,7 +3,7 @@
     <option name="ALTERNATIVE_JRE_PATH" value="openjdk-22" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="hi.reiknirit.TestGraph" />
-    <module name="ReikniritLokaverkefni" />
+    <module name="Streato" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="hi.reiknirit.*" />

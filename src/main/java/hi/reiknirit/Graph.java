@@ -16,17 +16,6 @@ public class Graph {
         return nodes.get(stopId);
     }
 
-    //Megum taka þetta function út
-    public void addNeighbour(String sourceId, String destinationId, String departureTime, String arrivalTime) {
-        if (!nodes.containsKey(sourceId) || !nodes.containsKey(destinationId)) {
-            // Handle error: One or both of the nodes do not exist
-            return;
-        }
-        Node sourceNode = nodes.get(sourceId);
-        Node destinationNode = nodes.get(destinationId);
-        Edge edge = new Edge(sourceNode, destinationNode, departureTime, arrivalTime);
-        sourceNode.addEdge(edge);
-    }
 
     public void addStop(Node busStop) {
         nodes.put(busStop.getId(), busStop);
@@ -71,7 +60,7 @@ public class Graph {
         }
     }
 
-    public void printGraph() {
+   /* public void printGraph() {
         System.out.println("Graph:");
 
 
@@ -83,9 +72,9 @@ public class Graph {
                 System.out.println("  Edge: " + edge.getDepartureNode().getId() +" Departure Time: " + edge.getDepartureTime() + " -> " + edge.getArrivalNode().getId() + " Arrival Time: " + edge.getArrivalTime());
             }
         }
-    }
+    }*/
 
-    public List<Node> findShortestPath(String startId, String endId) {
+    /*public List<Node> findShortestPath(String startId, String endId) {
         Map<String, Integer> distance = new HashMap<>();
         Map<String, Node> previous = new HashMap<>();
         PriorityQueue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(distance::get));
@@ -129,7 +118,7 @@ public class Graph {
         Collections.reverse(shortestPath);
 
         return shortestPath;
-    }
+    }*/
 
     private StopTime findNextStop(Map<String, StopTime> stopTimesMap, String tripId, int currentStopSequence) {
         for (StopTime stopTime : stopTimesMap.values()) {
